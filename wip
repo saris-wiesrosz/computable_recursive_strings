@@ -62,4 +62,4 @@ def compute_recursive_strings(n=3):
         stack1=reduce(concat, stack2)
     return [x for x in stack1 if len(x) == max(map(len, stack1))]
 compute_recursive_strings(3)
-# ['0110', '1001', '0110', '1001'] <-- print test data, this is more correct because j=0 at first (most slowly is best) so neither 00 nor 11 can be first 2 digits
+# ['0110', '1001', '0110', '1001'] print test data, this is more correct because j=0 at first (most slowly is best) so neither 00 nor 11 can be first 2 digits
