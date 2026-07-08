@@ -3,65 +3,62 @@ from collections import defaultdict
 import math
 from functools import reduce
 from operator import concat
-# work in progress
+# work in progress -- sorry there was a copying and pasting tab-intending related-spacing issue directly into GitHub browser window at first
 def compute_recursive_strings(n=3):
-  stack1 = []
-  stack2 = []
-  j=0
-  padding = ['0','1']
-  stack1 = padding
-  def hyperexponential(num,n):
-      for i in range(n):
-          num=2**num
-      return num if n>=1 else 1
-  def hypologarithm(num,n):
-      for i in range(n):
-          num=math.log2(num)
-      return num if n>=1 else num
-  def prefix_concat(first_half,k,h):
-      binary_strings = {}
-      for i in [hyperexponential(0,h) for h in range(1,n+1)]:
-          # this creates all the max-entropy strings not my finite computable Martin-Lof recursive class
-          binary_strings[i] = [''.join(p) for p in __import__('itertools').product('01', repeat=i) if p.count('0') == p.count('1')] if i>=2 else ['0','1']
-      #can't build the counter for binary strings!
-      #parse the first_half
-      #count the equispaced intervals of all powers of 2
-      counter=defaultdict(int)
-      for i in range(int(math.log2(k))+1):
-          for h in range(i+1):
-              counter[first_half[len(first_half)//2**i*h:len(first_half)//2**i*(h+1)]]+=1
-      #flatten the binary_strings dictionary of lists to a variable-length substring set
-      binary_substrings=set()
-      for key,value in binary_strings.items():
-          for val in value:
-              binary_substrings.add(val)
-      stack=[]
-      for el in binary_substrings:
-          if len(el)==2*len(first_half):
-              #build the counter for el
-              print(el)
-              el_counter=defaultdict(int)
-              helo=[int(hypologarithm(k,g)) for g in range(h+2)]
-              for i in helo:
-                  for g in range(i+1):
-                      el_counter[el[len(el)//2**i*g:len(el)//2**i*(g+1)]]+=1
-              #now compare counter and el_counter to approve the recursive extension
-              brk=False
-              for key, value in el_counter.items():
-                  if hypologarithm(len(key),j)>=value and first_half==el[:len(first_half)]:
-                      continue
-                  elif len(key)>=2**j:
-                      brk=True
-              stack.append(el) if brk==False else ""
-      return stack
+    stack1=[]
+    stack2=[]
+    j=0
+    padding = ['0','1']
+    stack1 = padding
+    def hyperexponential(num,n):
+        for i in range(n):
+            num=2**num
+        return num if n>=1 else 1
+    def hypologarithm(num,n):
+        for i in range(n):
+            num=math.log2(num)
+        return num if n>=1 else num
+    def prefix_concat(first_half,k,h):
+        binary_strings = {}
+        for i in [hyperexponential(0,h) for h in range(1,n+1)]:
+            # this creates all the max-entropy strings not my finite computable Martin-Lof recursive class
+            binary_strings[i] = [''.join(p) for p in __import__('itertools').product('01', repeat=i) if p.count('0') == p.count('1')] if i>=2 else ['0','1']
+        #can't build the counter for binary strings!
+        #parse the first_half
+        #count the equispaced intervals of all powers of 2
+        counter=defaultdict(int)
+        for i in range(int(math.log2(k))+1):
+            for h in range(i+1):
+                counter[first_half[len(first_half)//2**i*h:len(first_half)//2**i*(h+1)]]+=1
+        #flatten the binary_strings dictionary of lists to a variable-length substring set
+        binary_substrings=set()
+        for key,value in binary_strings.items():
+            for val in value:
+                binary_substrings.add(val)
+        stack=[]
+        for el in binary_substrings:
+            if len(el)==2*len(first_half):
+                #build the counter for el
+                el_counter=defaultdict(int)
+                helo=[int(hypologarithm(k,g)) for g in range(h+2)]
+                for i in helo:
+                    for g in range(i+1):
+                        el_counter[el[len(el)//2**i*g:len(el)//2**i*(g+1)]]+=1
+                #now compare counter and el_counter to approve the recursive extension
+                brk=False
+                for key, value in el_counter.items():
+                    if hypologarithm(len(key),j)>=value and first_half==el[:len(first_half)]:
+                        continue
+                    elif len(key)>=2**j:
+                        brk=True
+                stack.append(el) if brk==False else ""
+        return stack
     for (k,h) in [(hyperexponential(0,h)//1,h) for h in range(n)]:
         if 2**k/2**(2**j+j)>=1 and len(stack1[0])==2**k:
             j+=1
         for pop in stack1:
-            #bad coding practice to pass a redundant parameter
+            # bad coding practice to pass a redundant parameter
             stack2.append(prefix_concat(pop,k,h))
         stack1=reduce(concat, stack2)
-        print("stack1",stack1)
     return [x for x in stack1 if len(x) == max(map(len, stack1))]
 compute_recursive_strings(3)
-# ['0110', '1001', '0110', '1001'] <-- this is more correct because initially j=0 (is more slowly allowable) so can't start with 11 or 00
