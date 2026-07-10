@@ -10,75 +10,53 @@ def compute_recursive_strings(n=3):
     j=0
     padding = ['0','1']
     stack1 = padding
-    def hyperexponential(num,n):
-        for i in range(n+1):
-            num=2**num
-        return num if n>=1 else 1
-    def hypologarithm(num,n):
-        for i in range(n):
-            num=math.log2(num)
-        return num if n>=1 else num
-    def prefix_concat(first_half,k,h):
-        #print("first_half",first_half)
-        binary_strings = {}
-        for i in [hyperexponential(0,j) for j in range(1,h+2)]:
-            # this creates all the max-entropy strings not my finite computable Martin-Lof recursive class
-            binary_strings[i] = [''.join(p) for p in __import__('itertools').product('01', repeat=i) if p.count('0') == p.count('1')] if i>=2 else ['0','1']
-        #can't build the counter for binary strings!
-        #parse the first_half
-        #count the equispaced intervals of all powers of 2
+    def prefix_concat(first_half,k):
+        print("first_half",first_half)
+        # this creates all the max-entropy strings not my finite computable Martin-Lof recursive class
+        binary_strings = set([''.join(p) for p in __import__('itertools').product('01', repeat=2**k) if p.count('0') == p.count('1')])
+        # reduce the (complexity of the) information set to an exact match on the first half of the digits
+        binary_strings = [x for x in binary_strings if x[:len(first_half)]==first_half]
+        print(binary_strings)
         counter=defaultdict(int)
-        helo=[int(hypologarithm(k,g)) for g in range(h+2)]
-        for i in helo:
-            for g in range(2**i):
-                counter[first_half[len(first_half)//2**i*g:len(first_half)//2**i*(g+1)]]+=1
-        #for key,value in counter.items():
-        #    print("counter",key,value)
-        #flatten the binary_strings dictionary of lists to a variable-length substring set
-        binary_substrings=set()
-        for key,value in binary_strings.items():
-            for val in value:
-                binary_substrings.add(val)
-        stack=[]
-        #print("binary_substrings",binary_substrings)
-        binary_strings = [x for x in binary_substrings if x[:len(first_half)]==first_half]
-        for el in binary_substrings:
-            if len(el)>=2*len(first_half):
-                #build the counter for el
-                el_counter=defaultdict(int)
-                for i in range(h+2):
-                    #print("I",i)
-                    for g in range(2**i):
-                        el_counter[el[len(el)//2**i*g:len(el)//2**i*(g+1)]]+=1
-                #now compare counter and el_counter to approve the recursive extension
-                brk=False
-                #for key,value in el_counter.items():
-                #    print("el_counter",key,value)
-                for key, value in el_counter.items():
-                    if key != "":
-                        if hypologarithm(len(key),j)>=value and first_half==el[:len(first_half)]:
-                            continue
-                        elif len(key)>=2**j:
-                            #print("break")
-                            brk=True
-                            break
-                #print("append_el",el) if brk==False else ""
-                stack.append(el) if brk==False else ""
-        #print("STACK",stack)
-        return list(set(stack))
-    for (k,h) in [(int(hyperexponential(0,h)),h) for h in range(n)]:
+        for i in [2**h for h in range(k)]:
+            for g in range(i):
+                counter[first_half[len(first_half)//i*g:len(first_half)//i*(g+1)]]+=1
+        for key,value in counter.items():
+            print("counter: ",key,value)
+        stack = []
+        for el in binary_strings:
+            print("el: ",el)
+            el_2nd_half_counter=defaultdict(int)
+            el_2nd_half=el[2**(k-1):]
+            for i in [2**h for h in range(k)]:
+                for g in range(i):
+                    el_2nd_half_counter[el_2nd_half[len(el_2nd_half)//i*g:len(el_2nd_half)//i*(g+1)]]+=1
+            # now compare the counter dictionaries and make sure there are no matches on bit-subsequences length >=j
+            for key,value in el_2nd_half_counter.items():
+                print("el_2nd_half_counter: ",key,value)
+            brk=False
+            for key,value in counter.items():
+                if len(key)>=2**j:
+                    if el_2nd_half_counter[key]==0:
+                        print("continue")
+                        continue
+                    else:
+                        print("break")
+                        brk=True
+                        break
+            if brk==False:
+                stack.append(el)
+                print("append_el: ",el)
+        return stack
+    for k in range(1,n):
         if 2**k/2**(2**j+j)>=1:
             j+=1
-        #print("(k,h,j):",k,h,j)
-        #print("before_stack1",stack1)
-        #index=0.
+        print("(k,j):",k,j)
+        print("before_stack1",stack1)
         for pop in stack1:
-            #print("index",index/len(stack1))
-            #index+=1
-            # bad coding practice to pass a redundant parameter
-            stack2.append(prefix_concat(pop,k,h))
+            stack2.append(prefix_concat(pop,k))
         stack1=reduce(concat, stack2)
-        #print("stack1",stack1)
+        print("stack1",stack1)
         stack2=[]
-    return list(set([x for x in stack1 if len(x) == max(map(len, stack1))]))
-results = compute_recursive_strings(3)
+    return stack1
+compute_recursive_strings(4)
