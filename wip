@@ -3,6 +3,7 @@ from collections import defaultdict
 import math
 from functools import reduce
 from operator import concat
+# UPDATE: made a minor tweak and now it's lightning fast on my Best Buy laptop for the length 32 (2^32>4,000,000,000) binary strings
 # TODO: build suffixes-class recursively while minimizing step-wise population spatial-growth to reduce redundant checks on required constraints
 def compute_recursive_strings(n=3):
     stack1=[]
@@ -11,52 +12,55 @@ def compute_recursive_strings(n=3):
     padding = ['0','1']
     stack1 = padding
     def prefix_concat(first_half,k):
-        print("first_half",first_half)
+        #print("first_half",first_half)
         # this creates all the max-entropy strings not my finite computable Martin-Lof recursive class
-        binary_strings = set([''.join(p) for p in __import__('itertools').product('01', repeat=2**k) if p.count('0') == p.count('1')])
+        binary_strings = set([''.join(p) for p in __import__('itertools').product('01', repeat=2**(k-1)) if p.count('0') == p.count('1')]) if k>1 else {"0"} if first_half=="1" else {"1"} 
         # reduce the (complexity of the) information set to an exact match on the first half of the digits
-        binary_strings = [x for x in binary_strings if x[:len(first_half)]==first_half]
-        print(binary_strings)
+        #print(binary_strings)
         counter=defaultdict(int)
         for i in [2**h for h in range(k)]:
             for g in range(i):
                 counter[first_half[len(first_half)//i*g:len(first_half)//i*(g+1)]]+=1
-        for key,value in counter.items():
-            print("counter: ",key,value)
+        #for key,value in counter.items():
+        #    print("counter: ",key,value)
         stack = []
-        for el in binary_strings:
-            print("el: ",el)
+        for el2 in binary_strings:
+            el=first_half+el2
+            #print("el: ",el)
             el_2nd_half_counter=defaultdict(int)
             el_2nd_half=el[2**(k-1):]
             for i in [2**h for h in range(k)]:
                 for g in range(i):
                     el_2nd_half_counter[el_2nd_half[len(el_2nd_half)//i*g:len(el_2nd_half)//i*(g+1)]]+=1
-            # now compare the counter dictionaries and make sure there are no matches on bit-subsequences length >=2powj
-            for key,value in el_2nd_half_counter.items():
-                print("el_2nd_half_counter: ",key,value)
+            # now compare the counter dictionaries and make sure there are no matches on bit-subsequences length >=j
+            #for key,value in el_2nd_half_counter.items():
+                #print("el_2nd_half_counter: ",key,value)
             brk=False
             for key,value in counter.items():
                 if len(key)>=2**j:
                     if el_2nd_half_counter[key]==0:
-                        print("continue")
+                        #print("continue")
                         continue
                     else:
-                        print("break")
+                        #print("break")
                         brk=True
                         break
             if brk==False:
                 stack.append(el)
-                print("append_el: ",el)
+                #print("append_el: ",el)
         return stack
     for k in range(1,n):
         if 2**k/2**(2**j+j)>1:
             j+=1
-        print("(k,j):",k,j)
-        print("before_stack1",stack1)
+        #print("(k,j):",k,j)
+        #print("before_stack1",stack1)
+        index=0.
         for pop in stack1:
+            print("index: ",index/len(stack1))
+            index+=1
             stack2.append(prefix_concat(pop,k))
         stack1=reduce(concat, stack2)
-        print("stack1",stack1)
+        #print("stack1",stack1)
         stack2=[]
     return stack1
 compute_recursive_strings(4)
