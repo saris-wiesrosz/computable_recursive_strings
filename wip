@@ -3,7 +3,7 @@ from collections import defaultdict
 import math
 from functools import reduce
 from operator import concat
-# TODO: build suffixes-class recursively while step-wise invalidating population-growth constraints to proactively reduce memory and repetitive checks
+# TODO: build suffixes-class recursively while minimizing step-wise population spatial-growth constraints and reduce required redundant checks
 def compute_recursive_strings(n=3):
     stack1=[]
     stack2=[]
