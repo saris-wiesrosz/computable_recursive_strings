@@ -15,7 +15,6 @@ def compute_recursive_strings(n=3):
         #print("first_half",first_half)
         # this creates all the max-entropy strings not my finite computable Martin-Lof recursive class
         binary_strings = set([''.join(p) for p in __import__('itertools').product('01', repeat=2**(k-1)) if p.count('0') == p.count('1')]) if k>1 else {"0"} if first_half=="1" else {"1"} 
-        # reduce the (complexity of the) information set to an exact match on the first half of the digits
         #print(binary_strings)
         counter=defaultdict(int)
         for i in [2**h for h in range(k)]:
