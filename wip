@@ -49,7 +49,7 @@ def compute_recursive_strings(n=3):
                 print("append_el: ",el)
         return stack
     for k in range(1,n):
-        if 2**k/2**(2**j+j)>=1:
+        if 2**k/2**(2**j+j)>1:
             j+=1
         print("(k,j):",k,j)
         print("before_stack1",stack1)
@@ -60,5 +60,4 @@ def compute_recursive_strings(n=3):
         stack2=[]
     return stack1
 compute_recursive_strings(4)
-# test data: ['01100011', '01101010', '01101001', '01101100', '01100101', '10011100', '10010011', '10011010', '10010101', '10010110']
-
+# test data: ['01100011', '01101100', '10011100', '10010011']
