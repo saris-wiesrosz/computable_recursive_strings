@@ -61,3 +61,4 @@ def compute_recursive_strings(n=3):
     return stack1
 compute_recursive_strings(4)
 # test data: ['01100011', '01101100', '10011100', '10010011']
+# see how it "defers" (reschedules) the bit-length=2 (zero-entropy) "constant" blocks 11 and 00 towards the end of the binary string while avoiding repetition?
