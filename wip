@@ -62,4 +62,4 @@ def compute_recursive_strings(n=3):
 compute_recursive_strings(4)
 # test data: ['01100011', '01101100', '10011100', '10010011']
 # see how it "defers" (reschedules) the bit-length=2 (zero-entropy) equispaced "constant" blocks 11 and 00 towards the end while avoiding repeating 01 or 10?
-# I am trying to argue that my binary string max-entropy small-ish proper subclass should be highly incompressible. That is my thesis. It's a great thesis.
+# I am trying to argue that my binary string max-entropic small-ish proper subclass should be highly incompressible. That is my thesis. It's a great thesis.
