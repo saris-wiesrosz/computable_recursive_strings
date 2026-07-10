@@ -31,7 +31,7 @@ def compute_recursive_strings(n=3):
             for i in [2**h for h in range(k)]:
                 for g in range(i):
                     el_2nd_half_counter[el_2nd_half[len(el_2nd_half)//i*g:len(el_2nd_half)//i*(g+1)]]+=1
-            # now compare the counter dictionaries and make sure there are no matches on bit-subsequences length >=j
+            # now compare the counter dictionaries and make sure there are no matches on bit-subsequences length >=2powj
             for key,value in el_2nd_half_counter.items():
                 print("el_2nd_half_counter: ",key,value)
             brk=False
