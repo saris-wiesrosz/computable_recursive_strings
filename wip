@@ -5,6 +5,7 @@ from functools import reduce
 from operator import concat
 # UPDATE: made a minor tweak and now it's lightning fast on my Best Buy laptop for the n=6 (2^(n-1)=) bit-length 32 (2^32>4,000,000,000) binary strings
 # TODO: build suffixes-class recursively while minimizing step-wise population spatial-growth to reduce redundant checks on required constraints
+# NOTE: there are 601,080,390 max-entropic 32-bit binary strings of which my subclass consists of exactly 767,824 its members
 def compute_recursive_strings(n=3):
     stack1=[]
     stack2=[]
