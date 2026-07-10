@@ -3,7 +3,7 @@ from collections import defaultdict
 import math
 from functools import reduce
 from operator import concat
-# UPDATE: made a minor tweak and now it's lightning fast on my Best Buy laptop for the length 32 (2^32>4,000,000,000) binary strings
+# UPDATE: made a minor tweak and now it's lightning fast on my Best Buy laptop for the n=6 (2^(n-1)=) bit-length 32 (2^32>4,000,000,000) binary strings
 # TODO: build suffixes-class recursively while minimizing step-wise population spatial-growth to reduce redundant checks on required constraints
 def compute_recursive_strings(n=3):
     stack1=[]
