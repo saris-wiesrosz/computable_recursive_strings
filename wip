@@ -60,3 +60,5 @@ def compute_recursive_strings(n=3):
         stack2=[]
     return stack1
 compute_recursive_strings(4)
+# test data: ['01100011', '01101010', '01101001', '01101100', '01100101', '10011100', '10010011', '10011010', '10010101', '10010110']
+
